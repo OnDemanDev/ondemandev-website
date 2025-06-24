@@ -125,21 +125,21 @@ jobs:
         # Criar ConfigMap com o HTML atualizado
         echo "📄 Atualizando ConfigMap frontend-html..."
         kubectl create configmap frontend-html \
-          --from-file=ondemand-dev-site.html \
-          -n default \
+          --from-file=index.html=ondemand-dev-site.html \
+          -n frontend \
           --dry-run=client -o yaml | kubectl apply -f -
         
         # Reiniciar deployment para aplicar mudanças
         echo "🔄 Reiniciando deployment frontend..."
-        kubectl rollout restart deployment/frontend-deployment -n default
+        kubectl rollout restart deployment/frontend-deployment -n frontend 
         
         # Aguardar deployment ficar pronto
         echo "⏳ Aguardando deployment ficar pronto..."
-        kubectl rollout status deployment/frontend-deployment -n default --timeout=300s
+        kubectl rollout status deployment/frontend-deployment -n frontend --timeout=300s
         
         # Verificar pods
         echo "📊 Status dos pods:"
-        kubectl get pods -n default | grep frontend-deployment
+        kubectl get pods -n frontend | grep frontend-deployment
         
         # Aguardar um pouco e testar o site
         echo "🧪 Testando site..."
