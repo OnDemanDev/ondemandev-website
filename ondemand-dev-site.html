@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnDemandDev - Terceirização e Desenvolvimento de Software</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #00a8e8;
+            --accent-color: #f8f9fa;
+            --dark-color: #212529;
+            --light-color: #ffffff;
+            --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--dark-color);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--light-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--secondary-color);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-color);
+            padding: 160px 0 100px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: var(--light-color);
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--light-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        /* Services Section */
+        .services {
+            padding: 100px 0;
+            background-color: var(--accent-color);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--dark-color);
+            opacity: 0.8;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--light-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-card i {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 0;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+        }
+
+        .about-image {
+            flex: 1;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Values Section */
+        .values {
+            padding: 100px 0;
+            background-color: var(--accent-color);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .value-card {
+            background: var(--light-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .value-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .value-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-color);
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0 30px;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            color: var(--light-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .footer-links h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links ul li a {
+            color: var(--light-color);
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links ul li a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .about-content {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                background-color: var(--light-color);
+                width: 100%;
+                flex-direction: column;
+                padding: 30px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                transition: all 0.4s;
+                gap: 15px;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .about-text h2 {
+                font-size: 2rem;
+            }
+
+            .cta h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    
+    <!-- Umami Analytics - Privacy-focused Web Analytics -->
+    <script
+      defer
+      src="https://analytics.ondemandev.com.br/script.js"
+      data-website-id="e7068192-2723-4b79-8a67-b60543184d2d">
+    </script>
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <svg viewBox="0 0 300 80" width="200" height="50" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background shape -->
+                        <rect x="0" y="15" width="60" height="50" rx="5" fill="#0056b3" />
+
+                        <!-- Code brackets symbol -->
+                        <path d="M15,40 L25,30 M15,40 L25,50 M45,40 L35,30 M45,40 L35,50" stroke="#ffffff"
+                            stroke-width="4" stroke-linecap="round" />
+
+                        <!-- Circular dots representing on-demand concept -->
+                        <circle cx="30" cy="40" r="4" fill="#00a8e8" />
+                        <circle cx="40" cy="40" r="4" fill="#00a8e8" />
+                        <circle cx="20" cy="40" r="4" fill="#00a8e8" />
+
+                        <!-- Text part -->
+                        <text x="70" y="45" font-family="'Segoe UI', sans-serif" font-size="28" font-weight="700">
+                            <tspan fill="#0056b3">On</tspan>
+                            <tspan fill="#00a8e8">Demand</tspan>
+                            <tspan fill="#0056b3">Dev</tspan>
+                        </text>
+                    </svg>
+                </div>
+                <!-- Navigation menu removed for clean header -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Desenvolvimento de Software Sob Demanda</h1>
+            <p>Soluções tecnológicas personalizadas para impulsionar sua empresa. Nossa expertise em terceirização de 
+               desenvolvimento de software ajuda você a alcançar resultados excepcionais com agilidade e qualidade.</p>
+            <div>
+                <a href="#contact" class="btn">Fale Conosco</a>
+                <a href="#services" class="btn btn-outline">Nossos Serviços</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nossos Serviços</h2>
+                <p>Oferecemos uma ampla gama de serviços de desenvolvimento de software e terceirização para atender às 
+                   necessidades específicas do seu negócio.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Desenvolvimento Personalizado</h3>
+                    <p>Criamos soluções de software sob medida para atender aos requisitos específicos do seu negócio, 
+                       utilizando as tecnologias mais modernas e eficientes.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Desenvolvimento Mobile</h3>
+                    <p>Desenvolvemos aplicativos móveis intuitivos e responsivos para iOS e Android, 
+                       garantindo uma experiência de usuário excepcional.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-globe"></i>
+                    <h3>Desenvolvimento Web</h3>
+                    <p>Criamos websites e aplicações web de alto desempenho, responsivos e seguros para 
+                       atender às necessidades do seu negócio online.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Equipes Dedicadas</h3>
+                    <p>Montamos e gerenciamos equipes dedicadas de desenvolvedores altamente qualificados 
+                       para trabalhar exclusivamente no seu projeto.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-cloud"></i>
+                    <h3>Desenvolvimento Cloud</h3>
+                    <p>Oferecemos serviços de desenvolvimento e migração para a nuvem, garantindo 
+                       escalabilidade, segurança e redução de custos.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Consultoria Técnica</h3>
+                    <p>Fornecemos consultoria especializada em tecnologia e desenvolvimento para ajudar 
+                       sua empresa a tomar as melhores decisões estratégicas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Quem Somos</h2>
+                    <p>A OnDemandDev é uma empresa especializada em terceirização e desenvolvimento de software, 
+                       comprometida em oferecer soluções tecnológicas de alta qualidade para empresas de todos os portes.</p>
+                    <p>Com uma equipe de profissionais altamente qualificados e experientes, estamos preparados para 
+                       enfrentar os desafios mais complexos e entregar resultados excepcionais que impulsionam o 
+                       crescimento e a inovação dos nossos clientes.</p>
+                    <p>Nossa abordagem é focada em entender profundamente as necessidades específicas de cada cliente, 
+                       estabelecendo parcerias estratégicas de longo prazo baseadas em confiança, transparência e excelência técnica.</p>
+                </div>
+                <div class="about-image">
+                    <img src="/api/placeholder/600/400" alt="Equipe OnDemandDev">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section id="values" class="values">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nossa Missão & Valores</h2>
+                <p>Somos guiados por princípios fundamentais que moldam nossa cultura e forma de trabalho.</p>
+            </div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="fas fa-bullseye"></i>
+                    <h3>Missão</h3>
+                    <p>Impulsionar a transformação digital das empresas através de soluções de software 
+                       inovadoras e personalizadas, agregando valor real aos negócios dos nossos clientes.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-eye"></i>
+                    <h3>Visão</h3>
+                    <p>Ser reconhecida como referência em desenvolvimento e terceirização de software, 
+                       estabelecendo novos padrões de qualidade, inovação e satisfação do cliente.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Confiança</h3>
+                    <p>Construímos relacionamentos sólidos e duradouros baseados em transparência, 
+                       honestidade e cumprimento de compromissos.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Excelência</h3>
+                    <p>Buscamos constantemente a excelência em tudo o que fazemos, superando expectativas 
+                       e entregando resultados de alto valor.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Inovação</h3>
+                    <p>Mantemos uma mentalidade inovadora, explorando novas tecnologias e abordagens 
+                       para resolver problemas complexos de forma criativa.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Colaboração</h3>
+                    <p>Acreditamos no poder do trabalho em equipe e da colaboração para alcançar 
+                       resultados extraordinários e criar valor para todos os envolvidos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="cta">
+        <div class="container">
+            <h2>Pronto para Transformar seu Negócio?</h2>
+            <p>Entre em contato conosco hoje mesmo para discutir como podemos ajudar sua empresa a alcançar 
+               o próximo nível com nossas soluções de desenvolvimento de software personalizadas.</p>
+            <a href="#" class="btn">Solicite um Orçamento</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <svg viewBox="0 0 300 80" width="150" height="40" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Background shape -->
+                            <rect x="0" y="15" width="60" height="50" rx="5" fill="#0056b3" />
+    
+                            <!-- Code brackets symbol -->
+                            <path d="M15,40 L25,30 M15,40 L25,50 M45,40 L35,30 M45,40 L35,50" stroke="#ffffff"
+                                stroke-width="4" stroke-linecap="round" />
+    
+                            <!-- Circular dots representing on-demand concept -->
+                            <circle cx="30" cy="40" r="4" fill="#00a8e8" />
+                            <circle cx="40" cy="40" r="4" fill="#00a8e8" />
+                            <circle cx="20" cy="40" r="4" fill="#00a8e8" />
+    
+                            <!-- Text part -->
+                            <text x="70" y="45" font-family="'Segoe UI', sans-serif" font-size="28" font-weight="700">
+                                <tspan fill="#ffffff">On</tspan>
+                                <tspan fill="#00a8e8">Demand</tspan>
+                                <tspan fill="#ffffff">Dev</tspan>
+                            </text>
+                        </svg>
+                    </div>
+                    <p>Soluções de desenvolvimento de software sob demanda para impulsionar o crescimento do seu negócio.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="#about">Sobre Nós</a></li>
+                        <li><a href="#services">Serviços</a></li>
+                        <li><a href="#values">Missão & Valores</a></li>
+                        <li><a href="#">Carreiras</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Serviços</h4>
+                    <ul>
+                        <li><a href="#">Desenvolvimento Web</a></li>
+                        <li><a href="#">Desenvolvimento Mobile</a></li>
+                        <li><a href="#">Equipes Dedicadas</a></li>
+                        <li><a href="#">Consultoria Técnica</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contato</h4>
+                    <ul>
+                        <li><a href="mailto:contato@ondemanddev.com">contato@ondemanddev.com</a></li>
+                        <li><a href="tel:+5511999999999">+55 (11) 99999-9999</a></li>
+                        <li>São Paulo, SP - Brasil</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 OnDemandDev. Todos os direitos reservados.</p>
+                <p style="font-size: 0.8em; opacity: 0.7;">Última atualização: 23/06/2025 - Deploy automático via GitHub Actions</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/5511999999999" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Navigation
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+
+            hamburger.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking on a nav link
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        const headerOffset = 80;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 50) {
+                    header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                } else {
+                    header.style.boxShadow = 'none';
+                }
+            });
+
+            // Animation on scroll (simple version)
+            const animateOnScroll = function() {
+                const items = document.querySelectorAll('.service-card, .value-card');
+                
+                items.forEach(item => {
+                    const itemPosition = item.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.2;
+                    
+                    if (itemPosition < screenPosition) {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+
+            // Set initial state for animation
+            document.querySelectorAll('.service-card, .value-card').forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = 'all 0.5s ease-out';
+            });
+
+            // Call animation function on load and scroll
+            window.addEventListener('load', animateOnScroll);
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+
+    <!-- Umami Analytics -->
+    <script defer src="https://analytics.ondemandev.com.br/script.js" data-website-id="e7068192-2723-4b79-8a67-b60543184d2d"></script>
+</body>
+
+</html>
