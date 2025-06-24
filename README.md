@@ -44,5 +44,3 @@ Este repositório está configurado para **deploy automático** sempre que houve
 - **Site Principal**: https://ondemandev.com.br
 - **Analytics Dashboard**: https://analytics.ondemandev.com.br
 - **Repositório**: https://github.com/LucasFeuser/ondemandev-frontend
-
-
