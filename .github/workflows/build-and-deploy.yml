@@ -1,0 +1,158 @@
+name: Validate and Deploy HTML
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Validate HTML File
+      run: |
+        echo "Validando arquivo HTML..."
+        
+        # Verificar se o arquivo existe
+        if [ ! -f "ondemand-dev-site.html" ]; then
+          echo "❌ Arquivo ondemand-dev-site.html não encontrado!"
+          exit 1
+        fi
+        
+        # Verificar se contém código Umami
+        if grep -q "analytics.ondemandev.com.br" ondemand-dev-site.html; then
+          echo "✅ Código Umami Analytics encontrado"
+        else
+          echo "❌ Código Umami Analytics NÃO encontrado!"
+          exit 1
+        fi
+        
+        # Verificar Website ID
+        if grep -q "e7068192-2723-4b79-8a67-b60543184d2d" ondemand-dev-site.html; then
+          echo "✅ Website ID correto encontrado"
+        else
+          echo "❌ Website ID incorreto ou não encontrado!"
+          exit 1
+        fi
+        
+        echo "✅ HTML válido e pronto para deploy!"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.28.0'
+    
+    - name: Deploy to K3s via API
+      run: |
+        echo "🚀 Iniciando deploy via K3s API..."
+        
+        # Verificar se as secrets estão configuradas
+        echo "🔍 Verificando secrets..."
+        if [ -z "${{ secrets.K3S_API_URL }}" ]; then
+          echo "❌ K3S_API_URL não configurada!"
+          exit 1
+        fi
+        if [ -z "${{ secrets.K3S_CA_CERT }}" ]; then
+          echo "❌ K3S_CA_CERT não configurada!"
+          exit 1
+        fi
+        if [ -z "${{ secrets.K3S_TOKEN }}" ]; then
+          echo "❌ K3S_TOKEN não configurada!"
+          exit 1
+        fi
+        echo "✅ Todas as secrets estão configuradas"
+        
+        # Mostrar valores mascarados para debug (apenas primeiros chars)
+        echo "🔍 API URL: ${{ secrets.K3S_API_URL }}"
+        echo "🔍 CA Cert (primeiros 50 chars): $(echo '${{ secrets.K3S_CA_CERT }}' | cut -c1-50)..."
+        echo "🔍 Token (primeiros 20 chars): $(echo '${{ secrets.K3S_TOKEN }}' | cut -c1-20)..."
+        
+        # Configurar kubectl com certificado e token
+        echo "📄 Decodificando certificado CA..."
+        echo "${{ secrets.K3S_CA_CERT }}" | base64 -d > ca.crt
+        
+        # Verificar se o certificado foi decodificado corretamente
+        if [ ! -s ca.crt ]; then
+          echo "❌ Erro ao decodificar certificado CA!"
+          exit 1
+        fi
+        echo "✅ Certificado CA decodificado com sucesso"
+        
+        # Limpar configuração existente
+        rm -f ~/.kube/config
+        mkdir -p ~/.kube
+        
+        # Configurar cluster com verificação
+        echo "⚙️ Configurando cluster..."
+        kubectl config set-cluster k3s-cluster \
+          --server="${{ secrets.K3S_API_URL }}" \
+          --certificate-authority=ca.crt \
+          --embed-certs=true
+        
+        # Configurar usuário
+        kubectl config set-credentials k3s-user \
+          --token=${{ secrets.K3S_TOKEN }}
+        
+        # Configurar contexto
+        kubectl config set-context k3s-context \
+          --cluster=k3s-cluster \
+          --user=k3s-user
+        
+        # Usar o contexto
+        kubectl config use-context k3s-context
+        
+        # Verificar configuração
+        echo "🔧 Verificando configuração kubectl..."
+        kubectl config current-context
+        kubectl config view --minify
+        
+        # Verificar conectividade
+        echo "🔍 Testando conectividade com K3s..."
+        kubectl get nodes --insecure-skip-tls-verify=false
+        
+        # Criar ConfigMap com o HTML atualizado
+        echo "📄 Atualizando ConfigMap frontend-html..."
+        kubectl create configmap frontend-html \
+          --from-file=ondemand-dev-site.html \
+          -n default \
+          --dry-run=client -o yaml | kubectl apply -f -
+        
+        # Reiniciar deployment para aplicar mudanças
+        echo "🔄 Reiniciando deployment frontend..."
+        kubectl rollout restart deployment/frontend-deployment -n default
+        
+        # Aguardar deployment ficar pronto
+        echo "⏳ Aguardando deployment ficar pronto..."
+        kubectl rollout status deployment/frontend-deployment -n default --timeout=300s
+        
+        # Verificar pods
+        echo "📊 Status dos pods:"
+        kubectl get pods -n default | grep frontend-deployment
+        
+        # Aguardar um pouco e testar o site
+        echo "🧪 Testando site..."
+        sleep 30
+        
+        # Testar se o site está funcionando
+        if curl -s --max-time 30 https://ondemandev.com.br | grep -q "analytics.ondemandev.com.br"; then
+          echo "✅ Deploy bem-sucedido! Umami Analytics detectado no site"
+          echo "🌐 Site disponível em: https://ondemandev.com.br"
+          echo "📊 Analytics em: https://analytics.ondemandev.com.br"
+        else
+          echo "❌ Problema no deploy - Umami não encontrado ou site não responde"
+          exit 1
+        fi
+        
+        echo "🎉 Deploy automático concluído com sucesso!"
